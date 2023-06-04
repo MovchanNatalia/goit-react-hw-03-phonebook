@@ -5,6 +5,8 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import css from './App.module.css';
 
+const LOCAL_STORAGE_KEY = 'contacts';
+
 export class App extends Component {
   state = {
     contacts: [
@@ -15,6 +17,24 @@ export class App extends Component {
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const parseContacts = JSON.parse(contacts);
+
+    if (parseContacts) {
+      this.setState({ contacts: parseContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+    }
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify(this.state.contacts)
+    );
+  }
 
   formSubmitHendler = data => {
     const id = nanoid();
